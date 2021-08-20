@@ -77,6 +77,3 @@ a.) What is the point of reproducible code?
 b.) Given an example of why making your code reproducible is important for you to know in this class and moving forward. 
 
 c.) On a scale of 1 (easy) -- 10 (hard), how hard was this assignment. If this assignment was hard ($>5$), please state in one sentence what you struggled with. 
-
-
-
