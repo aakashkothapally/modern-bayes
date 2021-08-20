@@ -28,23 +28,109 @@ Reproducibility component: 10 points.
 1.  (22 points total, equally weighted) The data set **rnf6080.dat** records hourly rainfall at a certain location in Canada, every day from 1960 to 1980.
 
 a. Load the data set into R and make it a data frame called \texttt{rain.df}.  What command did you use?
+```{r}
+data <- read.table("./data/rnf6080.dat")
+rain.df <- data.frame(data)
+```
+I used the read.table command to load the dat file into R and the data.frame command to specifically ensure it is a data frame.
 
 b. How many rows and columns does \texttt{rain.df} have?  How do you know?  (If there are not 5070 rows and 27 columns, you did something wrong in the first part of the problem.)
 
+I can use the nrow and ncol commands to retrieve the number of rows and columns in the \texttt{raind.df} dataframe. 
+
+```{r}
+row_count <- nrow(rain.df)
+col_count <- ncol(rain.df)
+```
+
+Here are the values:
+
+```{r}
+row_count
+col_count
+```
+
+So, we have that the number of rows is 5070, and the number of columns is 27.
+
 c. What command would you use to get the names of the columns of \texttt{rain.df}? What are those names?
 
+I would use the names command to retrieve the names of columns in \texttt{rain.df}. 
+```{r}
+column_names <- names(rain.df)
+```
+
+Below are a list of the column names:
+```{r}
+column_names
+```
+
+
 d. What command would you use to get the value at row 2, column 4? What is the value?
+
+To extract the value of a single cell, we can use the [r, c] notation to get the value of the rth row and cth column. For row 2, column 4, we can do...
+
+```{r}
+rain.df[2, 4]
+```
+The value is 0.
+
 e. What command would you use to display the whole second row?  What is the content of that row?
+
+To extract the values of the entire row, we can use the [r, ] notation to get the values of the rth row. For the second row, we can do...
+
+```{r}
+rain.df[2,]
+```
+
 f.  What does the following command do?
 ```
 names(rain.df) <- c("year","month","day",seq(0,23))
 ```
+
+It is modifying names(rain.df), which as we answered in 1c, refers to the column names.
+
+seq(0, 23) creates a sequence of numerical values, starting with 0, ending at 23, and (by default) incrementing by 1, something like (0, 1, 2, ..., 23).
+
+So c("year","month","day",seq(0,23)) is combining the values to create a list composed of 'year', 'month', 'day', then 0, 1, 2, ..., 23.
+
+Essentially, the column names are being modified to be  "year" for the 1st column, "month" for the 2nd column, "day" for the 3rd column, 0 for the 4th column, 1 for the 5th column, 2 for the 6th column, ..., 23 for the 27th column.
+
 g.  Create a new column called \texttt{daily}, which is the sum of the 24 hourly columns.
+
+
+We are summing the hourly columns, which make up the 4th to 27th columns in each row. We can use rowSums to do this summation over those specific columns of each row and place the values for each row in the \texttt{daily} column.
+
+```{r}
+rain.df$daily <- rowSums(rain.df[,4:27])
+```
+
 h. Give the command you would use to create a histogram of the daily rainfall amounts.  Please make sure to attach your figures in your .pdf report. 
+
+```{r}
+hist(rain.df$daily)
+```
+
+
+
 i. Explain why that histogram above cannot possibly be right.
+
+This histogram cannot possibly be correct because it has days with negative rainfall. After inspecting the data frame more closely, it appears the value -999 is being placed in certain hours (obviously not meant to indicate that a negative amount of rainfall occurred). I presume these are hours where the amount of rainfall is not available.
+
 j. Give the command you would use to fix the data frame.
+
+I would replace all values of -999 in the dataframe with 0, since it seems fairer to presume no rain occurred where we don't have data for it (and all instances of -999 occur within the hourly columns, so this wouldn't impact anything else in the data).
+
+I would use these revised hourly numbers to recalculate the daily rainfall numbers.
+
 k. Create a corrected histogram and again include it as part of your submitted report. Explain why it is
 more reasonable than the previous histogram.
+
+```{r}
+rain.df[rain.df == -999] <- 0
+rain.df$daily <- rowSums(rain.df[,4:27])
+hist(rain.df$daily)
+```
+
 
 ***Data types***
 
@@ -57,12 +143,30 @@ max(x)
 sort(x)
 sum(x)
 ```
+
+The first command takes in a sequence of strings, storing it in the variable x. The following commands make use of this, computing max, sort, and sum on the sequence of strigs.
+
+When comparing a sequence of strings for max and sort, it utilizes ASCII values to make the comparison. Specifically each string is treated as a sequence of ASCII values (each character has a unique ASCII value). The first ASCII values of each string are compared, and if two strings share the same value, it follows with a comparison of the second value, and so on.
+
+max(x) evaluates with a sequence of strings by returning the highest ASCII value. So in this case, it looks at the first characters of the string, and the ASCII value of "1" < "5" < "7", so "7" is the max. max(x) = "7".
+
+sort(x) evaluates with a sequence of strings by returning them in increasing ASCII value. So in this case, it looks at the first characters of the string, and the ASCII value of "1" < "5" < "7", so "12", "5", "7" is the order. sort(x) = "7".
+
+sum(x) returns an error, because you cannot perform an addition using strings in R, it needs to use numeric/complex/logical values in order to sum something up.
+
 b. For the next two commands, either explain their results, or why they
 should produce errors.
 ```
 y <- c("5",7,12)
 y[2] + y[3]
 ```
+
+```{r}
+y <- c("5",7,12)
+y[2]
+```
+
+
 c. For the next two commands, either explain their results, or why they should
 produce errors.
 ```
@@ -76,4 +180,9 @@ a.) What is the point of reproducible code?
 
 b.) Given an example of why making your code reproducible is important for you to know in this class and moving forward. 
 
-c.) On a scale of 1 (easy) -- 10 (hard), how hard was this assignment. If this assignment was hard ($>5$), please state in one sentence what you struggled with. 
+c.) On a scale of 1 (easy) -- 10 (hard), how hard was this assignment. If this assignment was hard ($>5$), please state in one sentence what you struggled with.
+
+It felt like around a 3, since I needed to refresh my R skills, but nothing was particularly troublesome to work out.
+
+
+
