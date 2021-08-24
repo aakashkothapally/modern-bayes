@@ -144,13 +144,13 @@ sort(x)
 sum(x)
 ```
 
-The first command takes in a sequence of strings, storing it in the variable x. The following commands make use of this, computing max, sort, and sum on the sequence of strigs.
+The first command takes a sequence of strings into a vector, storing it in the variable x. The following commands make use of this, computing max, sort, and sum on the sequence of strigs.
 
 When comparing a sequence of strings for max and sort, it utilizes ASCII values to make the comparison. Specifically each string is treated as a sequence of ASCII values (each character has a unique ASCII value). The first ASCII values of each string are compared, and if two strings share the same value, it follows with a comparison of the second value, and so on.
 
-max(x) evaluates with a sequence of strings by returning the highest ASCII value. So in this case, it looks at the first characters of the string, and the ASCII value of "1" < "5" < "7", so "7" is the max. max(x) = "7".
+max(x) evaluates with the vector x by returning the highest ASCII value. So in this case, it looks at the first characters of the string, and the ASCII value of "1" < "5" < "7", so "7" is the max. max(x) = "7".
 
-sort(x) evaluates with a sequence of strings by returning them in increasing ASCII value. So in this case, it looks at the first characters of the string, and the ASCII value of "1" < "5" < "7", so "12", "5", "7" is the order. sort(x) = "7".
+sort(x) evaluates with the vector x by returning them in increasing ASCII value. So in this case, it looks at the first characters of the string, and the ASCII value of "1" < "5" < "7", so "12", "5", "7" is the order.
 
 sum(x) returns an error, because you cannot perform an addition using strings in R, it needs to use numeric/complex/logical values in order to sum something up.
 
@@ -161,11 +161,9 @@ y <- c("5",7,12)
 y[2] + y[3]
 ```
 
-```{r}
-y <- c("5",7,12)
-y[2]
-```
+The first command combines values into a 1D vector of length 3 and stores it in y. Importantly, since the first value is a character, all other values in the vector are also treated as characters. The first element is "5", the second element is "7", the third element is "12".
 
+y[2] + y[3] returns an error, because y[2] is "7" and y[3] is "12", and you cannot perform an addition using strings in R, it needs to use numeric/complex/logical values in order to sum something up.
 
 c. For the next two commands, either explain their results, or why they should
 produce errors.
@@ -174,11 +172,19 @@ z <- data.frame(z1="5",z2=7,z3=12)
 z[1,2] + z[1,3]
 ```
 
+The first command combines values into a data frame of length 3 and stores it in z. Importantly, even though the first value is a character, the other values in the data frame are numbers and are stored as numbers. The first element is "5", the second element is 7, the third element is 12.
+
+z[1, 2] + z[1, 3] evaluates with a sum of 19, because z[1, 2] is row 1, column 2 of the data frame, so it's 7, and z[1, 3] is row 1, column 3 of the data frame, so it's 12. The addition of 7 and 12 is 19.
+
 3. (3 pts, equally weighted). 
 
-a.) What is the point of reproducible code? 
+a.) What is the point of reproducible code?
+
+Code at times can rely on taking a random sample, and if that code is re-run over and over again, it can produce differing results with a new run. It can also involve one-time use of variables that are later removed from the code. If either of these things happen, it makes it difficult for another person to use your code to replicate/validate your results. Reproducible code is vital for sharing and communicating work with others.
 
 b.) Given an example of why making your code reproducible is important for you to know in this class and moving forward. 
+
+Code is often used for analysis, so an example could be answering a question where I have to take a random sample then provide a statistical description of it. If my code wasn't reproducible, I could be describing a result that wouldn't occur when the grader re-runs the code. This also matters moving forward, since analysis of results is important and code being reproducible is important to making that analysis remain relevant to others.
 
 c.) On a scale of 1 (easy) -- 10 (hard), how hard was this assignment. If this assignment was hard ($>5$), please state in one sentence what you struggled with.
 
