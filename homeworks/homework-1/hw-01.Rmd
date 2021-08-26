@@ -1,6 +1,6 @@
 ---
 title: 'Data Wrangling in \texttt{R}'
-author: "STA 360: Homework 1"
+author: "Aakash Kothapally, STA 360: Homework 1"
 date: "Due Friday August 27, 5 PM EDT"
 output: pdf_document
 ---
@@ -23,14 +23,20 @@ code \url{https://google.github.io/styleguide/Rguide.xml}. No late homework's wi
 
 Total points on assignment: 10 (reproducibility) + 22 (Q1) + 9 (Q2) + 3 (Q3) = 44 points 
 
-Reproducibility component: 10 points. 
+Reproducibility component: 10 points.
+
+```{r}
+# useful for filter function, which I make use of in 1k
+library(tidyverse)
+```
+
 
 1.  (22 points total, equally weighted) The data set **rnf6080.dat** records hourly rainfall at a certain location in Canada, every day from 1960 to 1980.
 
 a. Load the data set into R and make it a data frame called \texttt{rain.df}.  What command did you use?
 ```{r}
-data <- read.table("./data/rnf6080.dat")
-rain.df <- data.frame(data)
+rain.df <- read.table("./data/rnf6080.dat")
+rain.df <- data.frame(rain.df)
 ```
 I used the read.table command to load the dat file into R and the data.frame command to specifically ensure it is a data frame.
 
@@ -83,7 +89,7 @@ rain.df[2,]
 ```
 
 f.  What does the following command do?
-```
+```{r}
 names(rain.df) <- c("year","month","day",seq(0,23))
 ```
 
@@ -93,10 +99,9 @@ seq(0, 23) creates a sequence of numerical values, starting with 0, ending at 23
 
 So c("year","month","day",seq(0,23)) is combining the values to create a list composed of 'year', 'month', 'day', then 0, 1, 2, ..., 23.
 
-Essentially, the column names are being modified to be  "year" for the 1st column, "month" for the 2nd column, "day" for the 3rd column, 0 for the 4th column, 1 for the 5th column, 2 for the 6th column, ..., 23 for the 27th column.
+Essentially, the column names are being modified to be  "year" for the 1st column, "month" for the 2nd column, "day" for the 3rd column, 0 for the 4th column, 1 for the 5th column, 2 for the 6th column, ..., 23 for the 27th column. The 0 to 23 presumably represent the hourly columns with numbers associated with each hour of a given day.
 
 g.  Create a new column called \texttt{daily}, which is the sum of the 24 hourly columns.
-
 
 We are summing the hourly columns, which make up the 4th to 27th columns in each row. We can use rowSums to do this summation over those specific columns of each row and place the values for each row in the \texttt{daily} column.
 
@@ -107,30 +112,38 @@ rain.df$daily <- rowSums(rain.df[,4:27])
 h. Give the command you would use to create a histogram of the daily rainfall amounts.  Please make sure to attach your figures in your .pdf report. 
 
 ```{r}
-hist(rain.df$daily)
+hist(rain.df$daily,
+     main="Distribution of Rainfall Amounts in Canada, 1960-1980",
+     xlab="Rainfall Amount")
 ```
 
 
 
 i. Explain why that histogram above cannot possibly be right.
 
-This histogram cannot possibly be correct because it has days with negative rainfall. After inspecting the data frame more closely, it appears the value -999 is being placed in certain hours (obviously not meant to indicate that a negative amount of rainfall occurred). I presume these are hours where the amount of rainfall is not available.
+This histogram cannot possibly be correct because it has days with negative rainfall. After inspecting the data frame more closely, it appears negative values are being placed in certain hours (obviously not meant to indicate that a negative amount of rainfall occurred). I presume these are hours where the amount of rainfall is not available.
 
 j. Give the command you would use to fix the data frame.
 
-I would replace all values of -999 in the dataframe with 0, since it seems fairer to presume no rain occurred where we don't have data for it (and all instances of -999 occur within the hourly columns, so this wouldn't impact anything else in the data).
+I would exclude all days with negative rain values in the data frame since it seems fairer to not record days where we don't have positive data for it. I can store it in a different variable to ensure both copies are available for use. I will use the filter function and keep daily values that are non-negative.
 
-I would use these revised hourly numbers to recalculate the daily rainfall numbers.
+```{r}
+rain_wo_neg.df <- rain.df %>%
+  filter(daily >= 0)
+```
 
 k. Create a corrected histogram and again include it as part of your submitted report. Explain why it is
 more reasonable than the previous histogram.
 
+Now, we can look at the updated histogram.
+
 ```{r}
-rain.df[rain.df == -999] <- 0
-rain.df$daily <- rowSums(rain.df[,4:27])
-hist(rain.df$daily)
+hist(rain_wo_neg.df$daily,
+     main="Distribution of Rainfall Amounts in Canada, 1960-1980",
+     xlab="Rainfall Amount")
 ```
 
+This histogram makes more sense, as there are no negative rainfall numbers and no extremely high rainfall numbers here. And as a sanity check, the most common rainfall amount is the values close to or equal to 0, which also makes sense.
 
 ***Data types***
 
@@ -152,7 +165,7 @@ max(x) evaluates with the vector x by returning the highest ASCII value. So in t
 
 sort(x) evaluates with the vector x by returning them in increasing ASCII value. So in this case, it looks at the first characters of the string, and the ASCII value of "1" < "5" < "7", so "12", "5", "7" is the order.
 
-sum(x) returns an error, because you cannot perform an addition using strings in R, it needs to use numeric/complex/logical values in order to sum something up.
+sum(x) returns an error, because you cannot perform an addition using characters in R and x is a sequence of characters, it needs to use numeric/complex/logical values in order to sum something up.
 
 b. For the next two commands, either explain their results, or why they
 should produce errors.
@@ -161,9 +174,9 @@ y <- c("5",7,12)
 y[2] + y[3]
 ```
 
-The first command combines values into a 1D vector of length 3 and stores it in y. Importantly, since the first value is a character, all other values in the vector are also treated as characters. The first element is "5", the second element is "7", the third element is "12".
+The first command combines values into a vector of length 3 and stores it in y. Importantly, since the first value is a character, all other values in the vector are also treated as characters. The first element is "5", the second element is "7", the third element is "12".
 
-y[2] + y[3] returns an error, because y[2] is "7" and y[3] is "12", and you cannot perform an addition using strings in R, it needs to use numeric/complex/logical values in order to sum something up.
+y[2] + y[3] returns an error, because y[2] is "7" and y[3] is "12", and you cannot perform an addition using characters in R, it needs to use numeric/complex/logical values in order to sum something up.
 
 c. For the next two commands, either explain their results, or why they should
 produce errors.
@@ -172,7 +185,7 @@ z <- data.frame(z1="5",z2=7,z3=12)
 z[1,2] + z[1,3]
 ```
 
-The first command combines values into a data frame of length 3 and stores it in z. Importantly, even though the first value is a character, the other values in the data frame are numbers and are stored as numbers. The first element is "5", the second element is 7, the third element is 12.
+The first command combines values into a data frame of length 3 and stores it in z. Importantly, even though the first value is a character, the other values in the data frame are numbers and are stored as numbers. The first element is "5", the second element is 7, the third element is 12, all in the first row of the data frame.
 
 z[1, 2] + z[1, 3] evaluates with a sum of 19, because z[1, 2] is row 1, column 2 of the data frame, so it's 7, and z[1, 3] is row 1, column 3 of the data frame, so it's 12. The addition of 7 and 12 is 19.
 
@@ -189,6 +202,3 @@ Code is often used for analysis, so an example could be answering a question whe
 c.) On a scale of 1 (easy) -- 10 (hard), how hard was this assignment. If this assignment was hard ($>5$), please state in one sentence what you struggled with.
 
 It felt like around a 3, since I needed to refresh my R skills, but nothing was particularly troublesome to work out.
-
-
-
