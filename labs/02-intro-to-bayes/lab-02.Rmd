@@ -58,21 +58,76 @@ You have a rough sketch of what you should do for this part of the assignment. T
 # Input: obs.data, theta
 # Output: bernoulli likelihood
 
+myBernLH <- function(obs.data, theta) {
+  N <- length(obs.data)
+  x <- sum(obs.data)
+  LH <- (theta^x) * ((1-theta)^(N-x))
+  return(LH)
+}
 
 ### Plot LH for a grid of theta values ###
 # Create the grid #
+theta.sim <- seq(from=0, to=1, length.out=1000)
 # Store the LH values
+sim.LH <- myBernLH(obs.data, theta = theta.sim)
 # Create the Plot
+plot(theta.sim, sim.LH,
+     type='l',
+     main='Likelihood Profile',
+     xlab='Simulated Support',
+     ylab='Likelihood')
+
 ```
-
-
 
 # Task 4 (To be completed for homework)
 
 Write a function that takes as its inputs  prior parameters \textsf{a} and \textsf{b} for the Beta-Bernoulli model and the observed data, and produces the posterior parameters you need for the model. \textbf{Generate and print} the posterior parameters for a non-informative prior i.e. \textsf{(a,b) = (1,1)} and for an informative case \textsf{(a,b) = (3,1)}}.
+
+```{r}
+posterior <- function(a, b, obs.data){
+  N <- length(obs.data)
+  x <- sum(obs.data)
+  return(list('a' = a + x, 'b' = b + N - x))
+}
+
+noninformative <- posterior(a=1, b=1, obs.data)
+informative <- posterior(a=3, b=1, obs.data)
+
+print(noninformative)
+print(informative)
+```
 
 
 
 # Task 5 (To be completed for homework)
 
 Create two plots, one for the informative and one for the non-informative case to show the posterior distribution and superimpose the prior distributions on each along with the likelihood. What do you see? Remember to turn the y-axis ticks off since superimposing may make the scale non-sense.
+
+```{r}
+
+th = seq(0, 1, length=500)
+like = dbeta(th, sum(obs.data)+1, length(obs.data)-sum(obs.data)+1)
+a = 1
+b = 1
+prior = dbeta(th, a, b)
+post = dbeta(th, sum(obs.data)+a, length(obs.data)-sum(obs.data)+b)
+plot(th, prior, type='l', ylab='Density', lty = 1, lwd = 3, xlab = expression(theta),col='red', yaxt='n')
+par(new=TRUE)
+plot(th, like, type='l', ylab='Density', lty = 2, lwd = 3, xlab = expression(theta),col='green', yaxt='n')
+par(new=TRUE)
+plot(th, post, type='l', ylab='Density', lty = 3, lwd = 3, xlab = expression(theta),col='blue', yaxt='n',main='Non-Informative')
+legend('topright', lty=c(1,2,3), lwd=c(3,3,3), col=c('red','green','blue'), legend=c('prior', 'likelihood', 'posterior'))
+
+a = 3
+b = 1
+prior = dbeta(th, a, b)
+post = dbeta(th, sum(obs.data)+a, length(obs.data)-sum(obs.data)+b)
+plot(th, prior, type='l', ylab='', lty = 1, lwd = 3, xlab = '', col='red', yaxt='n')
+par(new=TRUE)
+plot(th, like, type='l', ylab='', lty = 2, lwd = 3, xlab = '', col='green', yaxt='n')
+par(new=TRUE)
+plot(th, post, type='l', ylab='Density', lty = 3, lwd = 3, xlab = expression(theta), col='blue', yaxt='n',main='Informative')
+legend('topright', lty=c(1,2,3), lwd=c(3,3,3), col=c('red','green','blue'), legend=c('prior', 'likelihood', 'posterior'))
+```
+
+We see for the non-informative prior (the beta(1,1) distribution that is essentially a uniform distribution), the posterior and prior distributions are the same. For the informative prior that weighs towards a higher theta, the posterior is averaged between the likelihood and prior, but with much higher weightig for the likelihood and is nearly equivalent to it. The posterior for the non-informative prior returns a distribution to the right of the distribution for the informative prior, due to the required averaging. The importance of the likelihood is higher for a non-informative prior compared to an informative prior.
