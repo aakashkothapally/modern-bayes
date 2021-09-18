@@ -1,7 +1,7 @@
 ---
 title: 'Homework 4'
 author: "Aakash Kothapally, STA-360"
-date: "Due at 5:00 PM EDT on Friday, 17 September"
+date: "Due at 5:00 PM EDT on Saturday, 18 September"
 geometry: margin=2cm
 output: pdf_document
 indent: true
@@ -93,7 +93,7 @@ muc = rnorm(sim, 11.8, sd = sqrt(1/(49 * lambdac)))
 mean(mus > muc)
 ```
 
-This means we assess the probability that spurters' IQ scores change more on average than controls' IQ scores, conditioned on the data provided of their IQ changes over the year, is 0.970645. It is highly likely the mean spurter IQ change is higher than the mean control IQ change. 
+This means we assess the probability that spurters' IQ scores change more on average than controls' IQ scores, conditioned on the data provided of their IQ changes over the year, is 0.970645, based on random sampling using a pre-selected random seed. It is highly likely the mean spurter IQ change is higher than the mean control IQ change. 
 
 
 (b) (15) Task 5
@@ -135,8 +135,8 @@ ggplot(data = simPrior,
        y = expression(paste(lambda^{-1/2}, " Std. Dev. of Change)"))) +
   ggtitle("Prior Samples") +
   theme(plot.title = element_text(hjust = 0.5)) +
-  xlim(-250, 250) +
-  ylim(0, 750)
+  xlim(-300, 300) +
+  ylim(0, 800)
 
 
 ```
