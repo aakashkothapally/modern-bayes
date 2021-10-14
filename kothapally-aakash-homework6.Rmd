@@ -69,7 +69,7 @@ res <- sampleGibbs(z, c, n.iter, init.theta, init.missing, r, a, b)
 
 Then, we produce the trace plots.
 
-```{r fig:trace-z, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:trace-z}Traceplot of $z_3, z_8, z_9, z_{10}, z_{12}.$"}
+```{r fig:trace-z1, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:trace-z}Traceplot of $z_3, z_8, z_9, z_{10}, z_{12}.$"}
 par(mfrow=c(2,3))
 plot(1:n.iter, res[,1], pch = 16, cex = .35,
      xlab = "Iteration", ylab = expression(theta),
@@ -147,7 +147,7 @@ Already, this looks like a stronger case for a well-mixed sampler than the 200 i
 run.avg <- apply(res, 2, cumsum)/(1:n.iter)
 ```
 
-```{r fig:run-z, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:run-z}Running average plots of $z_3, z_8, z_9, z_{10}, z_{12}.$"}
+```{r fig:run-z1, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:run-z}Running average plots of $z_3, z_8, z_9, z_{10}, z_{12}.$"}
 par(mfrow=c(2,3))
 plot(1:n.iter, run.avg[,1], type = "l",
      xlab = "Iteration", ylab = expression(theta),
@@ -196,7 +196,7 @@ init.missing <- rgamma(length(c), shape = r, rate = init.theta)
 res <- sampleGibbs(z, c, n.iter, init.theta, init.missing, r, a, b)
 ```
 
-```{r fig:density-theta, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:density-theta}Estimated posterior density of theta"}
+```{r fig:density-theta1, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:density-theta}Estimated posterior density of theta"}
 par(mfrow=c(2,1))
 # density plots
 plot(density(res[,1]), xlab = expression(theta), 
@@ -225,7 +225,7 @@ res <- sampleGibbs(z, c, n.iter, init.theta, init.missing, r, a, b)
 ```
 
 
-```{r fig:density-theta, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:density-theta}Estimated posterior density of theta"}
+```{r fig:density-theta2, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:density-theta}Estimated posterior density of theta"}
 par(mfrow=c(2,1))
 # density plots
 plot(density(res[,1]), xlab = expression(theta), 
