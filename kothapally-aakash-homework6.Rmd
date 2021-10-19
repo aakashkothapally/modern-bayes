@@ -8,6 +8,7 @@ font-size: 8px
 I used the code given to me in class below.
 
 ```{r}
+set.seed(5983)
 knitr::opts_chunk$set(cache=FALSE)
 library(xtable)
 # Samples from a truncated gamma with
@@ -48,6 +49,7 @@ sampleGibbs <- function(z, c, n.iter, init.theta, init.miss, r, a, b, burnin = 1
 } 
 ```
 
+\newpage
 
 2a. We produce trace plots and running average plots for theta and the censored values for 200 iterations. First, we run the Gibbs sampler with 200 iterations.
 
@@ -69,7 +71,7 @@ res <- sampleGibbs(z, c, n.iter, init.theta, init.missing, r, a, b)
 
 Then, we produce the trace plots.
 
-```{r fig:trace-z1, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:trace-z}Traceplot of $z_3, z_8, z_9, z_{10}, z_{12}.$"}
+```{r fig:trace-z1, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:trace-z}Traceplot of theta, $z_3, z_8, z_9, z_{10}, z_{12}.$"}
 par(mfrow=c(2,3))
 plot(1:n.iter, res[,1], pch = 16, cex = .35,
      xlab = "Iteration", ylab = expression(theta),
@@ -91,7 +93,7 @@ run.avg <- apply(res, 2, cumsum)/(1:n.iter)
 ```
 
 
-```{r fig:run-z, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:run-z}Running average plots of $z_3, z_8, z_9, z_{10}, z_{12}.$"}
+```{r fig:run-z, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:run-z}Running average plots of theta, $z_3, z_8, z_9, z_{10}, z_{12}.$"}
 par(mfrow=c(2,3))
 plot(1:n.iter, run.avg[,1], type = "l",
      xlab = "Iteration", ylab = expression(theta),
@@ -106,6 +108,8 @@ for (ind in missing.index){
 ```
 
 We can see for theta and censored values, the running average does not converge onto a value for any of them. In other words, the sampler has mixing issues and needs to be run for longer to see if it will converge for that larger number of iterations. As a result, I do not believe these diagnostic plots suggest we have run the sampler long enough.
+
+\newpage
 
 2b. We will now re-run the trace plots and running average plots for theta and the censored values, except we will use 10,000 iterations to see if this is enough runs to have a well-mixed sampler.
 
@@ -125,7 +129,7 @@ res <- sampleGibbs(z, c, n.iter, init.theta, init.missing, r, a, b)
 ```
 
 
-```{r fig:trace-z, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:trace-z}Traceplot of $z_3, z_8, z_9, z_{10}, z_{12}.$"}
+```{r fig:trace-z, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:trace-z}Traceplot of theta, $z_3, z_8, z_9, z_{10}, z_{12}.$"}
 par(mfrow=c(2,3))
 plot(1:n.iter, res[,1], pch = 16, cex = .35,
      xlab = "Iteration", ylab = expression(theta),
@@ -147,7 +151,7 @@ Already, this looks like a stronger case for a well-mixed sampler than the 200 i
 run.avg <- apply(res, 2, cumsum)/(1:n.iter)
 ```
 
-```{r fig:run-z1, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:run-z}Running average plots of $z_3, z_8, z_9, z_{10}, z_{12}.$"}
+```{r fig:run-z1, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:run-z}Running average plots of theta, $z_3, z_8, z_9, z_{10}, z_{12}.$"}
 par(mfrow=c(2,3))
 plot(1:n.iter, run.avg[,1], type = "l",
      xlab = "Iteration", ylab = expression(theta),
@@ -161,12 +165,19 @@ for (ind in missing.index){
 }
 ```
 
-We can see for theta and censored values, the running average converges onto a value for all of them. As a result, I do believe these diagnostic plots suggest we have run the sampler long enough.
+We can see for theta and censored values, the running average converges better than the 200 iteration case. However, the running averages are only meandering by exceptionally small amounts. As a result, I believe these diagnostic plots suggest we have run the sampler long enough, although subject to interpretation, someone could determine they require more iterations. The results are better than the results for the 200 iteration case.
 
+\newpage
 
 2c. These are the plots of the estimated density for theta and z9 (for 10,000 iterations).
 
-```{r fig:density-theta, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:density-theta}Estimated posterior density of theta"}
+We see that these plots are not as wonky or rough as the plots we saw for a lower iteration estimated density plot in the slides from class.
+
+Specifically, theta appears to be roughly normally distributed around a posterior mean close to 3.3.
+
+z9 appears to be right-skewed, with a median lower than the posterior mean (close to 3.3). 
+
+```{r fig:density-theta, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:density-theta}Estimated posterior density of theta, $z_9$"}
 par(mfrow=c(2,1))
 # density plots
 plot(density(res[,1]), xlab = expression(theta), 
@@ -177,7 +188,13 @@ plot(density(res[,4]), xlab = expression(z[9]),
 abline(v = mean(res[,4]), col = "red")
 ```
 
-2d. We can consider the posterior densities when altering the r, a, and b values.
+
+
+\newpage
+
+2d. We can consider the posterior densities when altering the a and b values.
+
+We expect the theta and z9 estimated density plots to have roughly the same shape when altering the parameters, but we also expect the posterior mean for the plots to be altered for both cases. The posterior densities will change for both cases.
 
 First, we consider r = 10, a = 1, b = 100.
 
@@ -196,14 +213,14 @@ init.missing <- rgamma(length(c), shape = r, rate = init.theta)
 res <- sampleGibbs(z, c, n.iter, init.theta, init.missing, r, a, b)
 ```
 
-```{r fig:density-theta1, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:density-theta}Estimated posterior density of theta"}
+```{r fig:density-theta1, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:density-theta}Estimated posterior density of theta, $z_9$"}
 par(mfrow=c(2,1))
 # density plots
 plot(density(res[,1]), xlab = expression(theta), 
-     main = expression(paste("Density of ", theta," given r = 10, a = 1, b= 100")))
+     main = expression(paste("Density of ", theta," given r = 10, a = 1, b = 100")))
 abline(v = mean(res[,1]), col = "red")
 plot(density(res[,4]), xlab = expression(z[9]),
-     main = expression(paste("Density of ", z[9]," given r = 10, a = 1, b= 100")))
+     main = expression(paste("Density of ", z[9]," given r = 10, a = 1, b = 100")))
 abline(v = mean(res[,4]), col = "red")
 ```
 
@@ -225,14 +242,14 @@ res <- sampleGibbs(z, c, n.iter, init.theta, init.missing, r, a, b)
 ```
 
 
-```{r fig:density-theta2, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:density-theta}Estimated posterior density of theta"}
+```{r fig:density-theta2, echo=FALSE, fig.width=7,fig.height=6,fig.cap="\\label{fig:density-theta}Estimated posterior density of theta, $z_9$"}
 par(mfrow=c(2,1))
 # density plots
 plot(density(res[,1]), xlab = expression(theta), 
-     main = expression(paste("Density of ", theta," given r = 10, a = 1, b= 100")))
+     main = expression(paste("Density of ", theta," given r = 10, a = 100, b = 1")))
 abline(v = mean(res[,1]), col = "red")
 plot(density(res[,4]), xlab = expression(z[9]),
-     main = expression(paste("Density of ", z[9]," given r = 10, a = 1, b= 100")))
+     main = expression(paste("Density of ", z[9]," given r = 10, a = 100, b = 1")))
 abline(v = mean(res[,4]), col = "red")
 ```
 
