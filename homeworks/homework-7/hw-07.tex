@@ -1,27 +1,108 @@
-\documentclass{article}
-\usepackage{hyperref}
-\input{custom2}
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Homework 7},
+  pdfauthor={Aakash Kothapally, STA-360},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=2cm]{geometry}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\title{Homework 7}
+\author{Aakash Kothapally, STA-360}
+\date{Due at 5:00 PM EDT on Saturday, 18 September}
+
 \begin{document}
-\title{Homework 7 (Lab 9)}
-\author{STA-360}
-\date{TBD}
 \maketitle
 
-Total points: 10 (reproducibility) + 30 (Q1) = 40 points. 
+Total points: 10 (reproducibility) + 30 (Q1) = 40 points.\\
 
-\textbf{General instructions for homeworks}: Please follow the uploading file instructions according to the syllabus. You will give the commands to answer each question in its own code block, which will also produce plots that will be automatically embedded in the output file. Each answer must be supported by written statements as well as any code used. Your code must be completely reproducible and must compile. Syllabus: (https://github.com/resteorts/modern-bayes/blob/master/syllabus/syllabus-sta602-spring19.pdf)
+\textbf{General instructions for homeworks}: Please follow the uploading
+file instructions according to the syllabus. You will give the commands
+to answer each question in its own code block, which will also produce
+plots that will be automatically embedded in the output file. Each
+answer must be supported by written statements as well as any code used.
+Your code must be completely reproducible and must compile.
 
-\textbf{Advice}: Start early on the homeworks and it is advised that you not wait until the day of. While the professor and the TA's check emails, they will be answered in the order they are received and last minute help will not be given unless we happen to be free.  
+\textbf{Advice}: Start early on the homeworks and it is advised that you
+not wait until the day of. While the professor and the TA's check
+emails, they will be answered in the order they are received and last
+minute help will not be given unless we happen to be free.
 
-\textbf{Commenting code}
-Code should be commented. See the Google style guide for questions regarding commenting or how to write 
-code \url{https://google.github.io/styleguide/Rguide.xml}. No late homework's will be accepted.
-
-Please look over the homework before lab this week. TA's will answer questions on the homework this week regarding these two 
-problems below. I recommend that you work through them as much as possible before lab this week. 
+\textbf{Commenting code} Code should be commented. See the Google style
+guide for questions regarding commenting or how to write code
+\url{https://google.github.io/styleguide/Rguide.xml}. No late homework's
+will be accepted.
 
 \begin{enumerate}
-\item (Multivariate Normal, 30 points, 10 points each) Hoff exercise 7.3 (Australian crab data).
-\item (Imputation, 50 points, 10 points each) Hoff 7.4 (Marriage data), \textbf{This is left as an optional exercise that will not be graded.}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  (Multivariate Normal, 30 points, 10 points each) Hoff exercise 7.3
+  (Australian crab data).
 \end{enumerate}
+
+\begin{enumerate}
+\def\labelenumi{\alph{enumi}.}
+\tightlist
+\item
+  For each of the two species, obtain posterior distributions of the
+  population mean \theta and covariance matrix \sigma as follows: Using
+  the semiconjugate prior distributions for \theta and \sigma, set μ0
+  equal to the sample mean of the data, 0 and S0 equal to the sample
+  covariance matrix and 0 = 4. Obtain 10,000 posterior samples of and .
+  Note that this ``prior'' distribution loosely centers the parameters
+  around empirical estimates based on the observed data (and is very
+  similar to the unit information prior described in the previous
+  exercise). It cannot be considered as our true prior distribution, as
+  it was derived from the observed data. However, it can be roughly
+  considered as the prior distribution of someone with weak but unbiased
+  information
+\end{enumerate}
+
 \end{document}

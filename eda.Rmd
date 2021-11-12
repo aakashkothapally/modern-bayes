@@ -1,0 +1,246 @@
+---
+title: "datathon"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+library(foreign)
+hkdata <- data.frame(read.spss("datathon/Hong Kong v4.2.sav", to.data.frame=TRUE))
+jpdata <- data.frame(read.spss("datathon/Japan v4.2.sav", to.data.frame=TRUE))
+kodata <- data.frame(read.spss("datathon/Korea v4.2.sav", to.data.frame=TRUE))
+mldata <- data.frame(read.spss("datathon/Mainland v4.2.sav", to.data.frame=TRUE))
+mndata <- data.frame(read.spss("datathon/Mongolia v4.2.sav", to.data.frame=TRUE))
+phdata <- data.frame(read.spss("datathon/Philippines v4.2.sav", to.data.frame=TRUE))
+tadata <- data.frame(read.spss("datathon/Taiwan v4.2.sav", to.data.frame=TRUE))
+thdata <- data.frame(read.spss("datathon/Thailand v4.2.sav", to.data.frame=TRUE))
+
+```
+
+```{r}
+hkdata <- hkdata %>%
+  drop_na(se005b, se009, se003, se002, se004, q007, q008, q009, q010)
+jpdata <- jpdata %>%
+  drop_na(se005b, se009, se003, q007, q008, q009, q010)
+kodata <- kodata %>%
+  drop_na(se005b, se009, se003, q007, q008, q009, q010)
+mldata <- mldata %>%
+  drop_na(se005b, se009, se003, q007, q008, q009, q010)
+mndata <- mndata %>%
+  drop_na(se005b, se009, se003, q007, q008, q009, q010)
+phdata <- phdata %>%
+  drop_na(se005b, se009, se003, q007, q008, q009, q010)
+tadata <- tadata %>%
+  drop_na(se005b, se009, se003, se002, se004, q007, q008, q009, q010)
+thdata <- thdata %>%
+  drop_na(se005b, se009, se003, q007, q008, q009, q010)
+
+```
+
+
+## Including Plots
+
+
+```{r}
+par(mfrow=c(2,3))
+ta009 <- ggplot(data = tadata, aes(x = se002, fill = q009))+
+  geom_bar(position = "fill")+
+  labs(title = "'How much trust do you have in political parties?' by sex"
+       , y = "Proportion",
+       x = "Sex") + theme(text = element_text(size=8))
+ta009
+
+
+ta009 <- ggplot(data = tadata, aes(x = se004, fill = q009))+
+  geom_bar(position = "fill")+
+  labs(title = "'How much trust do you have in political parties?' by marital identity"
+       , y = "Proportion",
+       x = "Marital Identity") + theme(text = element_text(size=8))
+ta009 + theme(legend.position = "none")
+
+ta009 <- ggplot(data = tadata, aes(x = se005b, fill = q009))+
+  geom_bar(position = "fill")+
+  labs(title = "'How much trust do you have in political parties?' by education level"
+       , y = "Proportion",
+       x = "Education")  + theme(text = element_text(size=8))
+ta009 + theme(legend.position = "none")
+
+
+ta009 <- ggplot(data = tadata, aes(x = se009, fill = q009))+
+  geom_bar(position = "fill")+
+  labs(title = "'How much trust do you have in political parties?' by income"
+       , y = "Proportion",
+       x = "Monthly Household Income") + theme(text = element_text(size=8))
+ta009 + theme(legend.position = "none")
+
+
+ta009 <- ggplot(data = tadata, aes(x = se003, fill = q009))+
+  geom_bar(position = "fill")+
+  labs(title = "Age Income Gender Marital Identity Education Level"
+       , y = "Proportion",
+       x = "Age")  + theme(text = element_text(size=8))
+ta009 + theme(legend.position = "none")
+```
+
+```{r}
+par(mfrow=c(1,3))
+ta010 <- ggplot(data = tadata, aes(x = se005b, fill = q010))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in Parliament? (TA)"
+       , y = "Proportion",
+       x = "Education Level") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+ta010
+
+
+ta010 <- ggplot(data = tadata, aes(x = se009, fill = q010))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in Parliament? (TA)"
+       , y = "Proportion",
+       x = "Monthly Household Income") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+ta010
+
+
+ta010 <- ggplot(data = tadata, aes(x = se003, fill = q010))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in Parliament? (TA)"
+       , y = "Proportion",
+       x = "Age") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+ta010
+```
+
+```{r}
+par(mfrow=c(1,3))
+th007 <- ggplot(data = thdata, aes(x = se005b, fill = q007))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in the courts? (TH)"
+       , y = "Proportion",
+       x = "Education") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th007
+
+
+th007 <- ggplot(data = thdata, aes(x = se009, fill = q007))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in the courts? (TH)"
+       , "Proportion",
+       x = "Monthly Household Income") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th007
+
+
+th007 <- ggplot(data = thdata, aes(x = se003, fill = q007))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in the courts? (TH)"
+       , "Proportion",
+       x = "Age") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th007
+
+
+```
+
+```{r}
+par(mfrow=c(1,3))
+
+th008 <- ggplot(data = thdata, aes(x = se005b, fill = q008))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in the national government? (TH)"
+       , y = "Proportion",
+       x = "Education") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th008
+
+
+th008 <- ggplot(data = thdata, aes(x = se009, fill = q008))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in the national government? (TH)"
+       , y = "Proportion",
+       x = "Monthly Household Income") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th008
+
+
+th008 <- ggplot(data = thdata, aes(x = se003, fill = q008))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in the national government? (TH)"
+       , y = "count",
+       x = "Age") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th008
+
+
+```
+
+```{r}
+par(mfrow=c(1,3))
+th009 <- ggplot(data = thdata, aes(x = se005b, fill = q009))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in political parties? (TH)"
+       , y = "Proportion",
+       x = "Education") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th009
+
+
+th009 <- ggplot(data = thdata, aes(x = se009, fill = q009))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in political parties? (TH)"
+       , y = "Proportion",
+       x = "Monthly Household Income") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th009
+
+
+th009 <- ggplot(data = thdata, aes(x = se003, fill = q009))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in political parties? (TH)"
+       , y = "Proportion",
+       x = "Age") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th009
+```
+
+```{r}
+par(mfrow=c(1,3))
+th010 <- ggplot(data = thdata, aes(x = se005b, fill = q010))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in Parliament? (TH)"
+       , y = "Proportion",
+       x = "Education Level") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th010
+
+
+th010 <- ggplot(data = thdata, aes(x = se009, fill = q010))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in Parliament? (TH)"
+       , y = "Proportion",
+       x = "Monthly Household Income") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th010
+
+
+th010 <- ggplot(data = thdata, aes(x = se003, fill = q010))+
+  geom_bar(position = "fill")+
+  labs(title = "How much trust do you have in Parliament? (TH)"
+       , y = "Proportion",
+       x = "Age") + theme(text = element_text(size=8),
+        axis.text.x = element_text(angle=90, hjust=1))
+th010
+```
