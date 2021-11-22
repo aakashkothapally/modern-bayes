@@ -88,7 +88,16 @@ length(fastest_times[fastest_times==4])/5000
 
 Based on these values, in the majority of simulations, swimmer 1 had the quickest time. We would recommend that the coach picks swimmer 1.
 
-```{r}
-knitr::include_graphics("unnamed (6) (1).jpg")
+## EXTRA CREDIT
+
+```{r  out.width = '110%',echo=FALSE}
+knitr::include_graphics("2a.JPG")
 ```
 
+```{r  out.width = '110%',echo=FALSE}
+knitr::include_graphics("2bc.JPG")
+```
+
+```{r out.width = '110%',echo=FALSE}
+knitr::include_graphics("2de.JPG")
+```

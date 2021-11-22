@@ -1,0 +1,21 @@
+---
+title: "test"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r out.width = '110%',echo=FALSE}
+knitr::include_graphics("2a.JPG")
+```
+
+```{r out.width = '110%',echo=FALSE}
+knitr::include_graphics("2bc.JPG")
+```
+
+```{r out.width = '110%',echo=FALSE}
+knitr::include_graphics("2de.JPG")
+```
